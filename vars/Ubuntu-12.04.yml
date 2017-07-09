@@ -1,5 +1,0 @@
----
-certbot_package: letsencrypt
-certbot_packages:
-  - name: python-certbot-apache
-    state: present
