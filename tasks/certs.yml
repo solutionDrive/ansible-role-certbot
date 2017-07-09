@@ -1,0 +1,27 @@
+---
+- name: Check if certificate already exists.
+  stat:
+    path: /etc/letsencrypt/live/{{ item.domain }}/cert.pem
+  register: letsencrypt_cert
+
+- name: Generate new certificate if one doesn't exist.
+  shell: letsencrypt certonly --apache --agree-tos -n -m {{ item.email }} -d {{ item.domain }}
+  when: not letsencrypt_cert.stat.exists
+
+- name: ensure archive-folder of certs is readable
+  file:
+    path: /etc/letsencrypt/archive
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+    recurse: yes
+
+- name: ensure live-folder of certs is readable
+  file:
+    path: /etc/letsencrypt/live
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+    recurse: yes
