@@ -9,3 +9,14 @@
 
 - include: renew-cron.yml
   when: certbot_auto_renew
+
+- name: Ensure needed packages for certification-generation are present
+  package:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ certbot_packages }}"
+  when: ansible_distribution == 'CentOS' or ansible_distribution_version == '16.04'
+
+- include: certs.yml
+  with_items: "{{ certbot_vhosts }}"
+  when: ansible_distribution == 'CentOS' or ansible_distribution_version == '16.04'
