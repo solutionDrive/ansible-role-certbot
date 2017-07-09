@@ -1,1 +1,4 @@
 certbot_package: letsencrypt
+certbot_packages:
+  - name: python-letsencrypt-apache
+    state: present
